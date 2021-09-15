@@ -1,0 +1,54 @@
+from django.shortcuts import render
+from django.http import HttpResponse
+
+# Create your views here.
+
+def home(request) :
+    return render(request, 'home.html')
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    
+    'core'
+]
+
+#Static
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
+
+
+# Auth
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+)
+SITE_ID = 1
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+$ python manage.py collectstatic
+from django.urls import path
+from . import views 
+app_name = 'core' 
+urlpatterns = [
+    path('', views.home, name='home')
+]
+from django.contrib import admin
+from django.urls import path, include 
+urlpatterns = [
+    path('', include('core.urls', namespace='core')), 
+    path('admin/', admin.site.urls),
+    path('accounts/', include('django.contrib.auth.urls'))
+]
